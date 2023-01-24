@@ -9,12 +9,11 @@ a Tic-Tac-Toe GUI application using minimax and alpha beta pruning algorithms
 ## Images
 this is the home page of the game
 
-![snapshot1](tictactoe.JPG)
+![snapshot1](images/tictactoe.JPG)
 
 and if a player wins
 
-![snapshot1](win.JPG)
-
+![snapshot1](images/win.JPG)
 
 ## Evaluation Function
 
