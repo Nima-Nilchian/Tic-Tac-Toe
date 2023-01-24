@@ -1,3 +1,4 @@
+import random
 import sys
 
 import pygame
@@ -84,6 +85,9 @@ class Board:
                 if self.empty_sqr(row, col):
                     empty_sqrs.append((row, col))
 
+        # Randomize the list to prevent the algorithm play same thing every round
+        random.shuffle(empty_sqrs)
+
         return empty_sqrs
 
     def isfull(self):
@@ -108,22 +112,26 @@ class Game:
         # self.ai.algorithm = self.choose_ai()      # 1-minimax  2-alpha beta
 
         # Draw title
-        self.set_title('choose AI algorithm', 80)
-        self.set_title('Play Tic-Tac-Toe', 280)
+        self.set_title('choose AI algorithm', 40)
+        self.set_title('choose AI Difficulty', 180)
+        self.set_title('Play Tic-Tac-Toe', 325)
         self.set_title('Reset game: (press r)', 465)
         self.set_title('change game mode: (press g)', 520)
 
         # Draw buttons
-        minimax_button = pygame.Rect((width / 8), (height / 4), width / 4, 50)
+        minimax_button = pygame.Rect((width / 8), (height / 7), width / 4, 50)
         self.set_button(minimax_button, 'Minimax')
-
-        alpha_beta_button = pygame.Rect(5 * (width / 8), (height / 4), width / 4, 50)
+        alpha_beta_button = pygame.Rect(5 * (width / 8), (height / 7), width / 4, 50)
         self.set_button(alpha_beta_button, 'Alpha Beta')
 
-        play_x_button = pygame.Rect((width / 8), (height / 1.75), width / 4, 50)
-        self.set_button(play_x_button, 'Play as X')
+        easy_button = pygame.Rect((width / 8), (height / 2.70), width / 4, 50)
+        self.set_button(easy_button, 'Easy')
+        hard_button = pygame.Rect(5 * (width / 8), (height / 2.70), width / 4, 50)
+        self.set_button(hard_button, 'Hard')
 
-        play_o_button = pygame.Rect(5 * (width / 8), (height / 1.75), width / 4, 50)
+        play_x_button = pygame.Rect((width / 8), (height / 1.65), width / 4, 50)
+        self.set_button(play_x_button, 'Play as X')
+        play_o_button = pygame.Rect(5 * (width / 8), (height / 1.65), width / 4, 50)
         self.set_button(play_o_button, 'Play as O')
 
         click, _, _ = pygame.mouse.get_pressed()
@@ -148,6 +156,16 @@ class Game:
                 time.sleep(0.2)
                 self.ai.algorithm = 2
                 print('Alpha Beta algorithm Chosen')
+
+            elif easy_button.collidepoint(mouse):
+                time.sleep(0.2)
+                self.ai.difficulty = 'easy'
+                print('AI Plays Easy')
+
+            elif hard_button.collidepoint(mouse):
+                time.sleep(0.2)
+                self.ai.difficulty = 'hard'
+                print('AI Plays Hard')
 
 
             screen.fill(background_color)
@@ -199,17 +217,6 @@ class Game:
     def next_player(self):
         self.turn = self.turn % 2 + 1
 
-    def choose_ai(self):
-        sys.stdout.write(
-            "Choose AI. [1/2]\n1. Minimax\n2. Alpha-Beta Pruning\n")
-        answer = input().lower()
-        if answer == "1":
-            return 1
-        elif answer == "2":
-            return 2
-        else:
-            sys.stdout.write("Please respond with '1', '2'.\n")
-
     def change_gamemode(self):
         self.gamemode = 'ai' if self.gamemode == 'aivsai' else 'aivsai'
 
@@ -219,7 +226,6 @@ class Game:
     def reset(self):
         self.__init__()
 
-    # def which_turn(self):
 
 
 

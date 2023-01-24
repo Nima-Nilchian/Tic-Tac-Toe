@@ -48,7 +48,7 @@ while True:
                 if game.board.empty_sqr(row, col):
                     game.make_move(row, col)
         else:
-            # AI initial call
+            # AI Turn
             if game.running:
                 # update the screen
                 pygame.display.update()
@@ -60,11 +60,8 @@ while True:
         if game.isover():
             game.running = False
             againButton = pygame.Rect(width / 3, height - 65, width / 3, 50)
-            again = pygame.font.Font.render(pygame.font.SysFont('bahnschrift', 20), "Play Again", True, black)
-            againRect = again.get_rect()
-            againRect.center = againButton.center
-            pygame.draw.rect(screen, white, againButton)
-            screen.blit(again, againRect)
+            game.set_button(againButton, 'Play Again')
+
             click, _, _ = pygame.mouse.get_pressed()
             if click == 1:
                 mouse = pygame.mouse.get_pos()
