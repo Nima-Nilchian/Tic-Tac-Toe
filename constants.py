@@ -14,9 +14,10 @@ radius = square_size // 4
 offset = 50
 
 # COLORS
-background_color = (200, 200, 255)
-# background_color = (192, 192, 192)
-
+background_color = (0, 0, 0)
 line_color = (192, 192, 192)
-circ_color = (239, 231, 200)
-cross_color = (66, 66, 66)
+circ_color = (30, 144, 255)
+cross_color = (255, 255, 255)
+white = (255, 255, 255)
+black = (0, 0, 0)
+
