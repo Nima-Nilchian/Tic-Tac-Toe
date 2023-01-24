@@ -33,9 +33,9 @@ class Board:
             if self.squares[0][col] == self.squares[1][col] == self.squares[2][col] != 0:
                 if show:
                     color = circ_color if self.squares[0][col] == 2 else cross_color
-                    iPos = (col * square_size + square_size // 2, 20)
-                    fPos = (col * square_size + square_size // 2, height - 20)
-                    pygame.draw.line(screen, color, iPos, fPos, line_width)
+                    i_pos = (col * square_size + square_size // 2, 20)
+                    f_pos = (col * square_size + square_size // 2, height - 20)
+                    pygame.draw.line(screen, color, i_pos, f_pos, line_width)
                 return self.squares[0][col]
 
         # horizontal wins
@@ -43,40 +43,39 @@ class Board:
             if self.squares[row][0] == self.squares[row][1] == self.squares[row][2] != 0:
                 if show:
                     color = circ_color if self.squares[row][0] == 2 else cross_color
-                    iPos = (20, row * square_size + square_size // 2)
-                    fPos = (width - 20, row * square_size + square_size // 2)
-                    pygame.draw.line(screen, color, iPos, fPos, line_width)
+                    i_pos = (20, row * square_size + square_size // 2)
+                    f_pos = (width - 20, row * square_size + square_size // 2)
+                    pygame.draw.line(screen, color, i_pos, f_pos, line_width)
                 return self.squares[row][0]
 
         # desc diagonal
         if self.squares[0][0] == self.squares[1][1] == self.squares[2][2] != 0:
             if show:
                 color = circ_color if self.squares[1][1] == 2 else cross_color
-                iPos = (20, 20)
-                fPos = (width - 20, height - 20)
-                pygame.draw.line(screen, color, iPos, fPos, cross_width)
+                i_pos = (20, 20)
+                f_pos = (width - 20, height - 20)
+                pygame.draw.line(screen, color, i_pos, f_pos, cross_width)
             return self.squares[1][1]
 
         # asc diagonal
         if self.squares[2][0] == self.squares[1][1] == self.squares[0][2] != 0:
             if show:
                 color = circ_color if self.squares[1][1] == 2 else cross_color
-                iPos = (20, height - 20)
-                fPos = (width - 20, 20)
-                pygame.draw.line(screen, color, iPos, fPos, cross_width)
+                i_pos = (20, height - 20)
+                f_pos = (width - 20, 20)
+                pygame.draw.line(screen, color, i_pos, f_pos, cross_width)
             return self.squares[1][1]
 
         # no win yet
         return 0
 
-
+    # change the house of the board to the player number
     def mark_sqr(self, row, col, player):
         self.squares[row][col] = player
         self.marked_sqrs += 1
 
     def empty_sqr(self, row, col):
         return self.squares[row][col] == 0
-
 
     def get_empty_sqrs(self):
         empty_sqrs = []
@@ -87,7 +86,6 @@ class Board:
 
         # Randomize the list to prevent the algorithm play same thing every round
         random.shuffle(empty_sqrs)
-
         return empty_sqrs
 
     def isfull(self):
@@ -102,16 +100,14 @@ class Game:
         self.board = Board()
         self.ai = AI()
         self.home_page()
-        self.player = -1        # 1:Cross   #2:Circle
+        self.player = -1        # 1: Cross   #2: Circle
         self.turn = 1
         self.gamemode = 'ai'    # aivsai or ai
         self.running = True
 
 
     def home_page(self):
-        # self.ai.algorithm = self.choose_ai()      # 1-minimax  2-alpha beta
-
-        # Draw title
+        # Draw titles
         self.set_title('choose AI algorithm', 40)
         self.set_title('choose AI Difficulty', 180)
         self.set_title('Play Tic-Tac-Toe', 325)
@@ -134,6 +130,7 @@ class Game:
         play_o_button = pygame.Rect(5 * (width / 8), (height / 1.65), width / 4, 50)
         self.set_button(play_o_button, 'Play as O')
 
+        # handle events for the action
         click, _, _ = pygame.mouse.get_pressed()
         if click == 1:
             mouse = pygame.mouse.get_pos()
@@ -166,7 +163,6 @@ class Game:
                 time.sleep(0.2)
                 self.ai.difficulty = 'hard'
                 print('AI Plays Hard')
-
 
             screen.fill(background_color)
 

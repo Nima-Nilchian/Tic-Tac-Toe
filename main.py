@@ -8,10 +8,10 @@ game = Game()
 ai = game.ai
 user = -1
 alg = 1
-# alg = game.choose_ai()  # 1-minimax  2-alpha beta
 
 while True:
 
+    # get the events from user
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -19,12 +19,12 @@ while True:
 
         if event.type == pygame.KEYDOWN:
 
-            # g-gamemode
+            # g - changes game mode
             if event.key == pygame.K_g:
                 game.change_gamemode()
                 print(f'game mode changed to {game.gamemode}')
 
-            # r-restart
+            # r - restarts the game
             if event.key == pygame.K_r:
                 game.reset()
                 board = game.board
@@ -38,6 +38,7 @@ while True:
     else:
         game.show_lines()
 
+        # Player Move in ai vs player mode
         if game.player == game.turn and game.running and game.gamemode == 'ai':
             click, _, _ = pygame.mouse.get_pressed()
             if click == 1:
@@ -57,6 +58,7 @@ while True:
                 game.make_move(row, col)
                 time.sleep(0.5)
 
+        # show a play again button when the game is over and resets the game
         if game.isover():
             game.running = False
             againButton = pygame.Rect(width / 3, height - 65, width / 3, 50)
@@ -73,4 +75,3 @@ while True:
                     ai = game.ai
 
     pygame.display.update()
-

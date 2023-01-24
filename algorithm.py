@@ -11,6 +11,7 @@ class AI:
     # MAIN EVAL
     def eval(self, main_board, turn, game_mode, alg=1):
 
+        # if the ai is 2 (O) it will play as an minimizer else will be maximizer
         maximizer = False
         if self.ai_player == 1:
             maximizer = True
@@ -21,6 +22,7 @@ class AI:
             else:
                 maximizer = False
 
+        # Alpha initially is infinity and Beta minus infinity
         a, b = -math.inf, math.inf
         if alg == 1:                                                # alg = 1 -> Minimax
             eval_, move = self.minimax(main_board, maximizer)
@@ -51,11 +53,11 @@ class AI:
             best_move = None
             empty_sqrs = board.get_empty_sqrs()
 
+            # Only 5 step deep the game tree
             if self.difficulty == 'easy':
                 empty_sqrs = empty_sqrs[:5]
 
-            for i in range(len(empty_sqrs)):
-                (row, col) = empty_sqrs[i]
+            for (row, col) in empty_sqrs:
 
                 temp_board = copy.deepcopy(board)
                 temp_board.mark_sqr(row, col, 1)
@@ -71,12 +73,10 @@ class AI:
             best_move = None
             empty_sqrs = board.get_empty_sqrs()
 
-            depth = len(empty_sqrs)
             if self.difficulty == 'easy':
                 empty_sqrs = empty_sqrs[:5]
 
-            for i in range(len(empty_sqrs)):
-                (row, col) = empty_sqrs[i]
+            for (row, col) in empty_sqrs:
                 temp_board = copy.deepcopy(board)
                 temp_board.mark_sqr(row, col, 2)
                 eval_ = self.minimax(temp_board, True)[0]
@@ -106,12 +106,10 @@ class AI:
             best_move = None
             empty_sqrs = board.get_empty_sqrs()
 
-            depth = len(empty_sqrs)
             if self.difficulty == 'easy':
                 empty_sqrs = empty_sqrs[:5]
 
-            for i in range(len(empty_sqrs)):
-                (row, col) = empty_sqrs[i]
+            for (row, col) in empty_sqrs:
                 temp_board = copy.deepcopy(board)
                 temp_board.mark_sqr(row, col, 1)
                 eval_ = self.alpha_beta(temp_board, False, a, b)[0]
@@ -132,12 +130,10 @@ class AI:
             best_move = None
             empty_sqrs = board.get_empty_sqrs()
 
-            depth = len(empty_sqrs)
             if self.difficulty == 'easy':
                 empty_sqrs = empty_sqrs[:5]
 
-            for i in range(len(empty_sqrs)):
-                (row, col) = empty_sqrs[i]
+            for (row, col) in empty_sqrs:
                 temp_board = copy.deepcopy(board)
                 temp_board.mark_sqr(row, col, 2)
                 eval_ = self.alpha_beta(temp_board, True, a, b)[0]
