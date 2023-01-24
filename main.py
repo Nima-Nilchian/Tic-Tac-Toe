@@ -1,11 +1,14 @@
 import sys
 
+import pygame
+
 from Game_Board import *
 
 game = Game()
 ai = game.ai
 user = -1
-alg = game.choose_ai()  # 1-minimax  2-alpha beta
+alg = 1
+# alg = game.choose_ai()  # 1-minimax  2-alpha beta
 
 while True:
 
@@ -14,12 +17,28 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if event.type == pygame.KEYDOWN:
+
+            # g-gamemode
+            if event.key == pygame.K_g:
+                game.change_gamemode()
+                print(f'game mode changed to {game.gamemode}')
+
+            # r-restart
+            if event.key == pygame.K_r:
+                game.reset()
+                board = game.board
+                ai = game.ai
+                screen.fill(background_color)
+                print('game restarted')
+
     if game.player == -1:
         game.home_page()
+        alg = ai.algorithm
     else:
         game.show_lines()
 
-        if game.player == game.turn and game.running:
+        if game.player == game.turn and game.running and game.gamemode == 'ai':
             click, _, _ = pygame.mouse.get_pressed()
             if click == 1:
                 pos = pygame.mouse.get_pos()
@@ -30,12 +49,13 @@ while True:
                     game.make_move(row, col)
         else:
             # AI initial call
-            if game.gamemode == 'ai' and game.running:
+            if game.running:
                 # update the screen
                 pygame.display.update()
 
-                row, col = ai.eval(game.board, alg)
+                row, col = ai.eval(game.board, game.turn, game.gamemode, alg)
                 game.make_move(row, col)
+                time.sleep(0.5)
 
         if game.isover():
             game.running = False
@@ -52,8 +72,8 @@ while True:
                     time.sleep(0.2)
                     game.player = -1
                     game.reset()
+                    game.gamemode = 'ai'
                     ai = game.ai
-                    alg = game.choose_ai()  # 1-minimax  2-alpha beta
 
     pygame.display.update()
 

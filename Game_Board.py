@@ -100,7 +100,7 @@ class Game:
         self.home_page()
         self.player = -1        # 1:Cross   #2:Circle
         self.turn = 1
-        self.gamemode = 'ai'    # pvp or ai
+        self.gamemode = 'ai'    # aivsai or ai
         self.running = True
 
 
@@ -108,40 +108,62 @@ class Game:
         # self.ai.algorithm = self.choose_ai()      # 1-minimax  2-alpha beta
 
         # Draw title
-        title = pygame.font.Font.render(pygame.font.SysFont('bahnschrift', 28), "Play Tic-Tac-Toe", True, white)
-        titleRect = title.get_rect()
-        titleRect.center = ((width / 2), 150)
-        screen.blit(title, titleRect)
+        self.set_title('choose AI algorithm', 80)
+        self.set_title('Play Tic-Tac-Toe', 280)
+        self.set_title('Reset game: (press r)', 465)
+        self.set_title('change game mode: (press g)', 520)
 
         # Draw buttons
-        playXButton = pygame.Rect((width / 8), (height / 2), width / 4, 50)
-        playX = pygame.font.Font.render(pygame.font.SysFont('bahnschrift', 20), "Play as X", True, black)
-        playXRect = playX.get_rect()
-        playXRect.center = playXButton.center
-        pygame.draw.rect(screen, white, playXButton)
-        screen.blit(playX, playXRect)
+        minimax_button = pygame.Rect((width / 8), (height / 4), width / 4, 50)
+        self.set_button(minimax_button, 'Minimax')
 
-        playOButton = pygame.Rect(5 * (width / 8), (height / 2), width / 4, 50)
-        playO = pygame.font.Font.render(pygame.font.SysFont('bahnschrift', 20), "Play as O", True, black)
-        playORect = playO.get_rect()
-        playORect.center = playOButton.center
-        pygame.draw.rect(screen, white, playOButton)
-        screen.blit(playO, playORect)
+        alpha_beta_button = pygame.Rect(5 * (width / 8), (height / 4), width / 4, 50)
+        self.set_button(alpha_beta_button, 'Alpha Beta')
+
+        play_x_button = pygame.Rect((width / 8), (height / 1.75), width / 4, 50)
+        self.set_button(play_x_button, 'Play as X')
+
+        play_o_button = pygame.Rect(5 * (width / 8), (height / 1.75), width / 4, 50)
+        self.set_button(play_o_button, 'Play as O')
 
         click, _, _ = pygame.mouse.get_pressed()
         if click == 1:
             mouse = pygame.mouse.get_pos()
-            if playXButton.collidepoint(mouse):
+            if play_x_button.collidepoint(mouse):
                 time.sleep(0.2)
                 self.player = 1
-                self.ai.player = 2
-            elif playOButton.collidepoint(mouse):
+                self.ai.ai_player = 2
+
+            elif play_o_button.collidepoint(mouse):
                 time.sleep(0.2)
                 self.player = 2
-                self.ai.player = 1
+                self.ai.ai_player = 1
+
+            elif minimax_button.collidepoint(mouse):
+                time.sleep(0.2)
+                self.ai.algorithm = 1
+                print('Minimax algorithm Chosen')
+
+            elif alpha_beta_button.collidepoint(mouse):
+                time.sleep(0.2)
+                self.ai.algorithm = 2
+                print('Alpha Beta algorithm Chosen')
 
 
             screen.fill(background_color)
+
+    def set_button(self, play_x_button, text, ):
+        play_x = pygame.font.Font.render(pygame.font.SysFont('bahnschrift', 20), text, True, black)
+        play_x_rect = play_x.get_rect()
+        play_x_rect.center = play_x_button.center
+        pygame.draw.rect(screen, white, play_x_button)
+        screen.blit(play_x, play_x_rect)
+
+    def set_title(self, text, pos):
+        title = pygame.font.Font.render(pygame.font.SysFont('bahnschrift', 28), text, True, white)
+        title_rect = title.get_rect()
+        title_rect.center = ((width / 2), pos)
+        screen.blit(title, title_rect)
 
     def show_lines(self):
         # vertical
@@ -189,7 +211,7 @@ class Game:
             sys.stdout.write("Please respond with '1', '2'.\n")
 
     def change_gamemode(self):
-        self.gamemode = 'ai' if self.gamemode == 'pvp' else 'pvp'
+        self.gamemode = 'ai' if self.gamemode == 'aivsai' else 'aivsai'
 
     def isover(self):
         return self.board.winner(show=True) != 0 or self.board.isfull()
